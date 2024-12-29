@@ -20,4 +20,14 @@
  *    -> npm run build
  *    -> Run js file: node ./dist/app.js
  *
+ * 7. Create "server.ts" file in the src folder
+ *
+ * 8. Create ".env" file in root, initialize PORT=5000 & DATABASE_URL=
+ *
+ * 9. Create database user and copy and paste the username password and write database name in the database url in '.env' file
+ *
+ * 10. Install declaration files
+ *
+ *
+ *
  */
