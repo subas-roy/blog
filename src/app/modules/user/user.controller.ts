@@ -4,10 +4,10 @@ import { userServices } from './user.service';
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const user = req.body; // data from client
+    const { user: userData } = req.body; // data from client
 
     // will call service func to send this data
-    const result = await userServices.createUserIntoDB(user);
+    const result = await userServices.createUserIntoDB(userData);
 
     // send response
     res.status(201).json({
