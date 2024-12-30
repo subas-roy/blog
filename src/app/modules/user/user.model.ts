@@ -11,7 +11,7 @@ const userSchema = new Schema<TUser>({
 });
 
 // Model
-const User = model<TUser>('User', userSchema);
+export const User = model<TUser>('User', userSchema);
 
 /**
  * Patern:

@@ -28,6 +28,21 @@
  *
  * 10. Install declaration files
  *
+ * 11. Modular Patern
+ *     -> Client Request hits Route
+ *     -> Route, calls controller function
+ *     -> Controller, calls service function
+ *     -> Service, handles business logic/runs query on model, brings data from database
+ *        -> Service sends data to conroller
+ *        -> Controller sends data as resmonse
  *
- *
+ *     =======================================
+ *     Requeest-Resonse Flow of Modular Patern
+ *     =======================================
+ *     Client(req) -->
+ *             route.ts(req) -->
+ *                  controller.ts(req) -->
+ *                  service.ts(res) -->
+ *             contorller.ts(res -> {success, message, data}) -->
+ *      Client
  */
