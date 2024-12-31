@@ -1,6 +1,8 @@
 // Handles application Request and Response
 import { NextFunction, Request, Response } from 'express';
 import { userServices } from './user.service';
+import sendResponse from '../../utils/sendResponse';
+import httpStatus from 'http-status';
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -10,11 +12,10 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     const result = await userServices.createUserIntoDB(user);
 
     // send response
-    const statusCode = 201;
-    res.status(statusCode).json({
+    sendResponse(res, {
       success: true,
-      message: 'User registered successfully!',
-      statusCode,
+      statusCode: httpStatus.OK,
+      message: 'User created successfully!',
       data: result,
     });
   } catch (error) {
