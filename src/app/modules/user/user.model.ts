@@ -5,9 +5,9 @@ import { TUser } from './user.interface';
 const userSchema = new Schema<TUser>(
   {
     name: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: ['admin', 'user'],
+    role: { type: String, enum: ['admin', 'user'], default: 'user' },
     isBlocked: { type: Boolean, default: false },
   },
   {
