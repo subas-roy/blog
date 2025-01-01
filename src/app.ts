@@ -3,6 +3,7 @@ import cors from 'cors';
 import { userRoutes } from './app/modules/user/user.route';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import notFound from './app/middlewares/notFound';
+import { blogRoutes } from './app/modules/blog/blog.route';
 
 const app: Application = express();
 
@@ -12,6 +13,7 @@ app.use(cors());
 
 // aplication routes
 app.use('/api/auth/', userRoutes);
+app.use('/api/blogs/', blogRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   const a = 10;
