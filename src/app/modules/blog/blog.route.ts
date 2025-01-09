@@ -1,7 +1,7 @@
 import exrress from 'express';
 import validateRequest from '../../middlewares/validateRequest';
-import { blogValidations } from './blog.validation';
 import { blogControllers } from './blog.controller';
+import { blogValidations } from './blog.validation';
 
 const router = exrress.Router(); // an object
 
@@ -12,6 +12,11 @@ router.post(
   blogControllers.createBlog,
 );
 router.get('/:id', blogControllers.getSingleBlog);
+router.patch(
+  '/:id',
+  validateRequest(blogValidations.updateBlogValidationSchema),
+  blogControllers.updateBlog,
+);
 router.get('/', blogControllers.getAllBlogs);
 router.delete('/:id', blogControllers.deleteBlog);
 
