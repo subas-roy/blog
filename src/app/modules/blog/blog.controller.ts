@@ -10,7 +10,7 @@ const createBlog = catchAsync(async (req, res) => {
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'Blog is created successfully!',
+    message: 'Blog created successfully',
     data: result,
   });
 });
@@ -21,7 +21,7 @@ const getAllBlogs = catchAsync(async (req, res) => {
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'Blogs are retrieved successfully!',
+    message: 'Blogs fetched successfully',
     data: result,
   });
 });
@@ -33,7 +33,7 @@ const getSingleBlog = catchAsync(async (req, res) => {
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'Blog is retrieved successfully!',
+    message: 'Blog fetched successfully',
     data: result,
   });
 });
@@ -46,7 +46,7 @@ const updateBlog = catchAsync(async (req, res) => {
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'Blog is updated successfully!',
+    message: 'Blog updated successfully',
     data: result,
   });
 });
@@ -58,7 +58,7 @@ const deleteBlog = catchAsync(async (req, res) => {
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: 'Blog is deleted successfully!',
+    message: 'Blog deleted successfully',
     data: result,
   });
 });

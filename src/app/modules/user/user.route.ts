@@ -12,4 +12,6 @@ router.post(
   userControllers.createUser,
 );
 
+router.patch('/:userId/block', userControllers.blockUser);
+
 export const userRoutes = router;

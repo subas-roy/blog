@@ -13,6 +13,8 @@ app.use(cors());
 
 // aplication routes
 app.use('/api/auth/', userRoutes);
+app.use('/api/admin/users/', userRoutes);
+app.use('/api/admin/blogs/', blogRoutes);
 app.use('/api/blogs/', blogRoutes);
 
 app.get('/', (req: Request, res: Response) => {
