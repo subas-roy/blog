@@ -6,8 +6,22 @@ const createBlogIntoDB = async (payload: TBlog) => {
   return result;
 };
 
-const getAllBlogesFromDB = async () => {
-  const result = await Blog.find();
+const getAllBlogesFromDB = async (query: Record<string, unknown>) => {
+  //{ email: {$regex: quer.searchTerm, $options: i}}
+  //{ presentAddress: {$regex: quer.searchTerm, $options: i}}
+  //{ 'name.firstName': {$regex: quer.searchTerm, $options: i}}
+
+  let search = '';
+
+  if (query?.search) {
+    search = query?.search as string;
+  }
+
+  const result = await Blog.find({
+    $or: ['title', 'content'].map((field) => ({
+      [field]: { $regex: search, $options: 'i' },
+    })),
+  }).populate('author');
   return result;
 };
 
