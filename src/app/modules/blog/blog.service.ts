@@ -7,9 +7,14 @@ const createBlogIntoDB = async (payload: TBlog) => {
 };
 
 const getAllBlogesFromDB = async (query: Record<string, unknown>) => {
+  console.log('base query', query);
+  const queryObj = { ...query };
+
   //{ email: {$regex: quer.searchTerm, $options: i}}
   //{ presentAddress: {$regex: quer.searchTerm, $options: i}}
   //{ 'name.firstName': {$regex: quer.searchTerm, $options: i}}
+
+  const blogSearchableFields = ['title', 'content'];
 
   let search = '';
 
@@ -17,16 +22,37 @@ const getAllBlogesFromDB = async (query: Record<string, unknown>) => {
     search = query?.search as string;
   }
 
-  const result = await Blog.find({
-    $or: ['title', 'content'].map((field) => ({
+  // filtering
+  const excludeFields = ['search', 'sort', 'limit'];
+  excludeFields.forEach((el) => delete queryObj[el]);
+
+  const searchQuery = Blog.find({
+    $or: blogSearchableFields.map((field) => ({
       [field]: { $regex: search, $options: 'i' },
     })),
-  }).populate('author');
-  return result;
+  });
+
+  const filterQuery = searchQuery.find(queryObj).populate('author');
+
+  let sort = '-createdAt';
+  if (query.sort) {
+    sort = query.sort as string;
+  }
+
+  const sortQuery = filterQuery.sort(sort);
+
+  let limit = 1;
+  if (query.limit) {
+    limit = query.limit as number;
+  }
+
+  const limitQuery = await sortQuery.limit(limit);
+
+  return limitQuery;
 };
 
 const getSingleBlogFromDB = async (id: string) => {
-  const result = await Blog.findById(id);
+  const result = await Blog.findById(id).populate('author');
   return result;
 };
 
