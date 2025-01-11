@@ -15,7 +15,7 @@ const blogSchema = new Schema<TBlog>(
     author: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: [true, 'User id is reuired'],
+      required: [true, 'User id is required'],
     },
     isPublished: {
       type: Boolean,

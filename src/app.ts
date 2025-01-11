@@ -4,6 +4,7 @@ import { userRoutes } from './app/modules/user/user.route';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import notFound from './app/middlewares/notFound';
 import { blogRoutes } from './app/modules/blog/blog.route';
+import { authRoutes } from './app/modules/auth/auth.routes';
 
 const app: Application = express();
 
@@ -16,6 +17,7 @@ app.use('/api/auth/', userRoutes);
 app.use('/api/admin/users/', userRoutes);
 app.use('/api/admin/blogs/', blogRoutes);
 app.use('/api/blogs/', blogRoutes);
+app.use('/api/auth/', authRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   const a = 10;

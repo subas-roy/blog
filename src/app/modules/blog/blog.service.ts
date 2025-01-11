@@ -1,3 +1,4 @@
+import { blogSearchableFields } from './blog.constant';
 import { TBlog } from './blog.interface';
 import { Blog } from './blog.model';
 
@@ -9,42 +10,49 @@ const createBlogIntoDB = async (payload: TBlog) => {
 const getAllBlogesFromDB = async (query: Record<string, unknown>) => {
   const queryObj = { ...query };
 
-  //{ email: {$regex: quer.searchTerm, $options: i}}
-  //{ presentAddress: {$regex: quer.searchTerm, $options: i}}
-  //{ 'name.firstName': {$regex: quer.searchTerm, $options: i}}
-
-  const blogSearchableFields = ['title', 'content'];
-
   let search = '';
-
   if (query?.search) {
-    search = query?.search as string;
+    search = query.search as string;
   }
 
-  // filtering
-  const excludeFields = ['search', 'sort', 'limit', 'page', 'fields'];
-
+  // Exclude non-filtering fields
+  const excludeFields = [
+    'search',
+    'sortBy',
+    'sortOrder',
+    'limit',
+    'page',
+    'fields',
+    'filter',
+  ];
   excludeFields.forEach((el) => delete queryObj[el]);
 
-  console.log({ query }, { queryObj });
-
+  // Search handling
   const searchQuery = Blog.find({
     $or: blogSearchableFields.map((field) => ({
       [field]: { $regex: search, $options: 'i' },
     })),
   });
 
+  // Apply additional filter
+  if (query.filter) {
+    queryObj._id = query.filter;
+  }
+
   const filterQuery = searchQuery.find(queryObj).populate('author');
 
+  // Sorting
   let sort = '-createdAt';
-  if (query.sort) {
-    sort = query.sort as string;
+  if (query.sortBy) {
+    const sortOrder = query.sortOrder === 'asc' ? '' : '-';
+    sort = `${sortOrder}${query.sortBy}`;
   }
 
   const sortQuery = filterQuery.sort(sort);
 
+  // Pagination
   let page = 1;
-  let limit = 1;
+  let limit = 10;
   let skip = 0;
 
   if (query.limit) {
@@ -56,24 +64,18 @@ const getAllBlogesFromDB = async (query: Record<string, unknown>) => {
     skip = (page - 1) * limit;
   }
 
-  const paginateQuery = sortQuery.skip(skip);
+  const paginateQuery = sortQuery.skip(skip).limit(limit);
 
-  const limitQuery = paginateQuery.limit(limit);
-
-  // field limiting
-
+  // Field Limiting
   let fields = '-__v';
-  // fields: 'name,email';
-  // fields: 'name email';
-
   if (query.fields) {
     fields = (query.fields as string).split(',').join(' ');
-    console.log(fields);
   }
 
-  const fieldQuery = await limitQuery.select(fields);
+  // Execute query with selected fields
+  const result = await paginateQuery.select(fields);
 
-  return fieldQuery;
+  return result;
 };
 
 const getSingleBlogFromDB = async (id: string) => {
