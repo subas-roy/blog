@@ -3,6 +3,7 @@ import validateRequest from '../../middlewares/validateRequest';
 import { blogControllers } from './blog.controller';
 import { blogValidations } from './blog.validation';
 import auth from '../../middlewares/auth';
+import { USER_ROLE } from '../user/user.constant';
 
 const router = exrress.Router(); // an object
 
@@ -19,6 +20,6 @@ router.patch(
   blogControllers.updateBlog,
 );
 router.get('/', auth(), blogControllers.getAllBlogs);
-router.delete('/:id', blogControllers.deleteBlog);
+router.delete('/:id', auth(USER_ROLE.admin), blogControllers.deleteBlog);
 
 export const blogRoutes = router;
