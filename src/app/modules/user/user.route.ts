@@ -2,6 +2,8 @@ import exrress from 'express';
 import { userControllers } from './user.controller';
 import { userValidations } from './user.validation';
 import validateRequest from '../../middlewares/validateRequest';
+import auth from '../../middlewares/auth';
+import { USER_ROLE } from './user.constant';
 
 const router = exrress.Router(); // an object
 
@@ -12,6 +14,10 @@ router.post(
   userControllers.createUser,
 );
 
-router.patch('/:userId/block', userControllers.blockUser);
+router.patch(
+  '/:userId/block',
+  auth(USER_ROLE.admin),
+  userControllers.blockUser,
+);
 
 export const userRoutes = router;

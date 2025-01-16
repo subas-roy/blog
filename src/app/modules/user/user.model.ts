@@ -15,7 +15,18 @@ const userSchema = new Schema<TUser>(
   },
 );
 
-// Model
+// set '' after saving password
+userSchema.post('save', function (doc, next) {
+  doc.password = '';
+  next();
+});
+
+// Helper function (Instance Method) - Check if user exists by ID
+export const isUserExistsById = async (id: string) => {
+  return await User.findById(id);
+};
+
+// Model creation
 export const User = model<TUser>('User', userSchema);
 
 /**

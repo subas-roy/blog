@@ -15,7 +15,7 @@ app.use(cors());
 // aplication routes
 app.use('/api/auth/', userRoutes);
 app.use('/api/admin/users/', userRoutes);
-app.use('/api/admin/blogs/', blogRoutes);
+app.use('/api/admin/blogs/', authRoutes);
 app.use('/api/blogs/', blogRoutes);
 app.use('/api/auth/', authRoutes);
 
