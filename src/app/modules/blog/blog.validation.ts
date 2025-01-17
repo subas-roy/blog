@@ -28,12 +28,6 @@ const updateBlogValidationSchema = z.object({
         required_error: 'Content is required',
       })
       .optional(),
-    author: z
-      .string({
-        invalid_type_error: 'Author must be string',
-        required_error: 'Author is required',
-      })
-      .optional(),
     isPublished: z.boolean().default(true).optional(),
   }),
 });

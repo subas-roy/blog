@@ -44,7 +44,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
     }
 
     // add user to Request
-    req.user = decoded as JwtPayload;
+    req.user = { _id: user._id, role: user.role };
     next();
   });
 };
