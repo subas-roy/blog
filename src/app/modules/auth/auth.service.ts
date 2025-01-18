@@ -1,9 +1,9 @@
 import config from '../../config';
 import AppError from '../../errors/AppError';
-import { User } from '../user/user.model';
+import { isUserExistsById, User } from '../user/user.model';
 import { TLoginUser } from './auth.interface';
 import httpStatus from 'http-status';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { createToken } from './auth.utils';
 
 const loginUser = async (payload: TLoginUser) => {
@@ -50,6 +50,46 @@ const loginUser = async (payload: TLoginUser) => {
   };
 };
 
+const refreshToken = async (token: string) => {
+  // check if the given token is valid
+  const decoded = jwt.verify(
+    token,
+    config.jwt_refresh_secret as string,
+  ) as JwtPayload;
+
+  const { userId } = decoded;
+
+  // checking if the user is exists
+  const user = await isUserExistsById(userId);
+
+  if (!user) {
+    throw new AppError(httpStatus.FORBIDDEN, 'User not found!');
+  }
+
+  // checking if the user is blocked
+  const isBlocked = user?.isBlocked;
+
+  if (isBlocked) {
+    throw new AppError(httpStatus.FORBIDDEN, 'User is blocked!');
+  }
+
+  const jwtPayload = {
+    userId: user.id,
+    role: user.role,
+  };
+
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string,
+  );
+
+  return {
+    accessToken,
+  };
+};
+
 export const authServices = {
   loginUser,
+  refreshToken,
 };

@@ -16,4 +16,10 @@ router.post(
 
 router.delete('/:id', auth(USER_ROLE.admin), blogControllers.deleteBlog);
 
+router.post(
+  '/refresh-token',
+  validateRequest(authValidations.refreshTokenValidatioinSchema),
+  authControllers.refreshToken,
+);
+
 export const authRoutes = router;

@@ -5,12 +5,14 @@ import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import notFound from './app/middlewares/notFound';
 import { blogRoutes } from './app/modules/blog/blog.route';
 import { authRoutes } from './app/modules/auth/auth.routes';
+import cookieParser from 'cookie-parser';
 
 const app: Application = express();
 
 // parsers
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser());
+app.use(cors({ origin: ['http://localhost:5173'] }));
 
 // aplication routes
 app.use('/api/auth/', userRoutes);
