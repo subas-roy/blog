@@ -45,4 +45,9 @@
  *                  service.ts(res) -->
  *             contorller.ts(res -> {success, message, data}) -->
  *      Client
+ *
+ *
+ * Create Random String
+ *    node
+ *    require('crypto').randomBytes(64).toString('hex')
  */
