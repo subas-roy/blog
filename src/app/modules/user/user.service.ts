@@ -2,7 +2,11 @@ import { TUser } from './user.interface';
 import { User } from './user.model';
 
 const createUserIntoDB = async (user: TUser) => {
-  const result = await User.create(user); // create user into DB
+  const sanitizedUser = {
+    ...user,
+    role: 'user', // Always enforce 'user' role
+  };
+  const result = await User.create(sanitizedUser); // create user into DB
 
   return result;
 };

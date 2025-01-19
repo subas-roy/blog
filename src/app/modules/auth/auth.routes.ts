@@ -2,7 +2,6 @@ import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
 import { authValidations } from './auth.validation';
 import { authControllers } from './auth.controller';
-import { blogControllers } from '../blog/blog.controller';
 import auth from '../../middlewares/auth';
 import { USER_ROLE } from '../user/user.constant';
 
@@ -14,7 +13,7 @@ router.post(
   authControllers.loginUser,
 );
 
-router.delete('/:id', auth(USER_ROLE.admin), blogControllers.deleteBlog);
+router.delete('/:id', auth(USER_ROLE.admin), authControllers.deleteBlog);
 
 router.post(
   '/refresh-token',

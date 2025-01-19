@@ -5,6 +5,7 @@ import { TLoginUser } from './auth.interface';
 import httpStatus from 'http-status';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { createToken } from './auth.utils';
+import { Blog } from '../blog/blog.model';
 
 const loginUser = async (payload: TLoginUser) => {
   // checking if the user is exist
@@ -89,7 +90,17 @@ const refreshToken = async (token: string) => {
   };
 };
 
+const deleteBlogFromDB = async (id: string) => {
+  const result = await Blog.findByIdAndUpdate(
+    id,
+    { isPublished: false },
+    { new: true },
+  );
+  return result;
+};
+
 export const authServices = {
   loginUser,
   refreshToken,
+  deleteBlogFromDB,
 };
