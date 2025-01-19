@@ -7,6 +7,7 @@ import config from '../config';
 import { TError } from '../interface/error';
 import handleZodError from '../errors/handleZodError';
 import handleValidationError from '../errors/handleValidationError';
+import handleCastError from '../errors/handleCastError';
 
 const globalErrorHandler = (
   err: any,
@@ -36,6 +37,11 @@ const globalErrorHandler = (
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     error = simplifiedError?.error;
+  } else if (err.name === 'CastError') {
+    const simplifiedError = handleCastError(err);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    error = simplifiedError?.error;
   }
 
   // ultimate return
@@ -45,7 +51,7 @@ const globalErrorHandler = (
     statusCode,
     error,
     stack: config.NODE_ENV === 'development' ? err?.stack : null,
-    // err,
+    err,
   });
 };
 
