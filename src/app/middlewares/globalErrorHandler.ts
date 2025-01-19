@@ -8,6 +8,7 @@ import { TError } from '../interface/error';
 import handleZodError from '../errors/handleZodError';
 import handleValidationError from '../errors/handleValidationError';
 import handleCastError from '../errors/handleCastError';
+import handleDuplicateError from '../errors/handleDuplicateError';
 
 const globalErrorHandler = (
   err: any,
@@ -42,6 +43,11 @@ const globalErrorHandler = (
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     error = simplifiedError?.error;
+  } else if (err.code === 11000) {
+    const simplifiedError = handleDuplicateError(err);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    error = simplifiedError?.error;
   }
 
   // ultimate return
@@ -51,7 +57,7 @@ const globalErrorHandler = (
     statusCode,
     error,
     stack: config.NODE_ENV === 'development' ? err?.stack : null,
-    err,
+    // err,
   });
 };
 
