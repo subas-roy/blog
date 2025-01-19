@@ -6,6 +6,7 @@ import { ZodError, ZodIssue } from 'zod';
 import config from '../config';
 import { TError } from '../interface/error';
 import handleZodError from '../errors/handleZodError';
+import handleValidationError from '../errors/handleValidationError';
 
 const globalErrorHandler = (
   err: any,
@@ -30,6 +31,11 @@ const globalErrorHandler = (
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     error = simplifiedError?.error;
+  } else if (err.name === 'ValidationError') {
+    const simplifiedError = handleValidationError(err);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    error = simplifiedError?.error;
   }
 
   // ultimate return
@@ -39,7 +45,7 @@ const globalErrorHandler = (
     statusCode,
     error,
     stack: config.NODE_ENV === 'development' ? err?.stack : null,
-    // err: err,
+    // err,
   });
 };
 

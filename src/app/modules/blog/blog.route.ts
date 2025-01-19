@@ -10,8 +10,8 @@ const router = exrress.Router(); // an object
 // will call controller func
 router.post(
   '/',
-  auth(USER_ROLE.user),
-  validateRequest(blogValidations.createBlogValidationSchema),
+  // auth(USER_ROLE.user),
+  // validateRequest(blogValidations.createBlogValidationSchema),
   blogControllers.createBlog,
 );
 router.get(

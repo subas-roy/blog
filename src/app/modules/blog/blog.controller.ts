@@ -8,7 +8,7 @@ import AppError from '../../errors/AppError';
 const createBlog = catchAsync(async (req, res) => {
   const payload = {
     ...req.body,
-    author: req.user._id, // Automatically set the logged-in user as author
+    author: req?.user?._id, // Automatically set the logged-in user as author
   };
   const result = await blogServices.createBlogIntoDB(payload);
 
