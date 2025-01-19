@@ -46,8 +46,30 @@ const getSingleBlog = catchAsync(async (req, res) => {
 
 const updateBlog = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const blog = req.body;
-  const result = await blogServices.updateBlogIntoDB(id, blog);
+  const userId = req.user._id;
+  const updateData = req.body; // The new data for the blog
+
+  // Ensure the user is authenticated properly
+  if (!userId) {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'User not authenticated');
+  }
+
+  // Fetch the blog to verify ownership
+  const blog = await blogServices.getSingleBlogFromDB(id);
+
+  if (!blog) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Blog not found');
+  }
+
+  // Check if the logged-in user is the author
+  if (!blog.author.equals(userId)) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      'You can only update your own blog',
+    );
+  }
+
+  const result = await blogServices.updateBlogIntoDB(id, updateData);
 
   sendResponse(res, {
     success: true,
@@ -74,7 +96,7 @@ const deleteBlog = catchAsync(async (req, res) => {
   }
 
   // Check if the logged-in user is the author
-  if (blog.author.toString() !== userId.toString()) {
+  if (!blog.author.equals(userId)) {
     throw new AppError(
       httpStatus.NOT_FOUND,
       'You can only delete your own blog',
