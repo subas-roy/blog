@@ -22,10 +22,8 @@ app.use('/api/blogs/', blogRoutes);
 app.use('/api/auth/', authRoutes);
 
 app.get('/', (req: Request, res: Response) => {
-  Promise.reject();
-  // const a = 10;
-
-  // res.send(a);
+  const a = 10;
+  res.send(a);
 });
 
 // global error handler
