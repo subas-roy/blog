@@ -22,9 +22,10 @@ app.use('/api/blogs/', blogRoutes);
 app.use('/api/auth/', authRoutes);
 
 app.get('/', (req: Request, res: Response) => {
-  const a = 10;
+  Promise.reject();
+  // const a = 10;
 
-  res.send(a);
+  // res.send(a);
 });
 
 // global error handler
