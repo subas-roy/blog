@@ -8,7 +8,7 @@ import { blogServices } from '../blog/blog.service';
 
 const loginUser = catchAsync(async (req, res) => {
   const result = await authServices.loginUser(req.body);
-  const { refreshToken, accessToken } = result;
+  const { refreshToken, token } = result;
 
   res.cookie('refreshToken', refreshToken, {
     secure: config.NODE_ENV === 'production',
@@ -19,7 +19,7 @@ const loginUser = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Login successful',
-    data: { accessToken },
+    data: { token },
   });
 });
 

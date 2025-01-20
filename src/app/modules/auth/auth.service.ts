@@ -23,7 +23,7 @@ const loginUser = async (payload: TLoginUser) => {
   // checking if the password is correct
   const isPasswordMatched = isUserExists.password === payload.password;
   if (!isPasswordMatched) {
-    throw new AppError(httpStatus.FORBIDDEN, 'Password does not matched');
+    throw new AppError(httpStatus.UNAUTHORIZED, 'Invalid credentials');
   }
 
   // Access granted: send access token & refreshtoken
@@ -46,7 +46,7 @@ const loginUser = async (payload: TLoginUser) => {
   );
 
   return {
-    accessToken,
+    token: accessToken,
     refreshToken,
   };
 };

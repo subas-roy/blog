@@ -14,14 +14,13 @@ const createBlog = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     success: true,
-    statusCode: httpStatus.OK,
+    statusCode: httpStatus.CREATED,
     message: 'Blog created successfully',
     data: result,
   });
 });
 
 const getAllBlogs = catchAsync(async (req, res) => {
-  console.log('Cookies: ', req.cookies);
   const result = await blogServices.getAllBlogesFromDB(req.query);
 
   sendResponse(res, {
