@@ -30,8 +30,7 @@ app.use('/api/auth/', authRoutes);
 
 // Default route for the root URL
 app.get('/', (req: Request, res: Response) => {
-  const a = 10; // Example variable (can be replaced with actual logic)
-  res.send(a); // Send the value of `a` as the response
+  res.send({ message: 'Welcome to the Blogging API Service' });
 });
 
 // Middleware for handling global errors

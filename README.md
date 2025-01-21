@@ -2,7 +2,7 @@
 
 ## Live URL
 
-[Live URL](http://your-live-url.com)
+[Live URL](https://blog-backend-eta-weld.vercel.app/)
 
 ## Project Overview
 
