@@ -1,7 +1,6 @@
 export type TError = {
-  path: string | number;
-  message: string;
-}[];
+  details: string;
+};
 
 export type TGenericErrorResponse = {
   statusCode: number;

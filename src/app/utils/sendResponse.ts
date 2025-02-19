@@ -17,7 +17,7 @@ type TResponse<T> = {
  */
 const sendResponse = <T>(res: Response, data: TResponse<T>) => {
   res.status(data?.statusCode).json({
-    successe: data.success, // Indicates operation success
+    success: data.success, // Indicates operation success
     message: data.message, // Optional message for the response
     statusCode: data.statusCode, // HTTP status code for the response
     data: data.data, // Data payload being returned

@@ -28,14 +28,11 @@ const globalErrorHandler = (
   next: NextFunction,
 ) => {
   // Initialize default error values
-  let statusCode = 500; // Default to internal server error
+  let statusCode = 400; // Default to bad request
   let message = 'Something went wrong!'; // Default error message
-  let error: TError = [
-    {
-      path: '', // No specific path, as it's a general error
-      message: 'Something went wrong!', // Default message
-    },
-  ];
+  let error: TError = {
+    details: 'Something went wrong!', // Default message
+  };
 
   // Check for different types of errors and handle accordingly
 
@@ -71,22 +68,16 @@ const globalErrorHandler = (
   else if (err instanceof AppError) {
     statusCode = err?.statusCode || statusCode;
     message = err?.message || message;
-    error = [
-      {
-        path: '', // No specific path for AppError
-        message: err.message, // Use the message from AppError
-      },
-    ];
+    error = {
+      details: err.message, // Use the message from AppError
+    };
   }
   // If the error is a general Error instance (catch-all for other errors)
   else if (err instanceof Error) {
     message = err?.message || message;
-    error = [
-      {
-        path: '', // No specific path for general errors
-        message: err.message, // Use the error message
-      },
-    ];
+    error = {
+      details: err.message, // Use the error message
+    };
   }
 
   // Return the error response to the client
