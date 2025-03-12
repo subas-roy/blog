@@ -14,7 +14,7 @@ const createUser = catchAsync(async (req, res) => {
   // Send a standardized success response back to the client
   sendResponse(res, {
     success: true, // Indicates the operation was successful
-    statusCode: httpStatus.OK, // HTTP status code for OK (200)
+    statusCode: httpStatus.CREATED, // HTTP status code for OK (200)
     message: 'User registered successfully', // Success message
     data: result, // The result data from the service function
   });

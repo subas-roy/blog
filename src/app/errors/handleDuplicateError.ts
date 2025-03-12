@@ -13,12 +13,9 @@ const handleDuplicateError = (err: any): TGenericErrorResponse => {
   const email = err.message.match(/"([^"]+)"/)?.[1];
 
   // Construct an array of errors with details about the field and the specific error message
-  const error: TError = [
-    {
-      path: '', // Field name can be left empty or extracted explicitly based on error details
-      message: `${email} is already exists!`, // Provide a user-friendly error message
-    },
-  ];
+  const error: TError = {
+    details: `${email} is already exists!`, // Provide a user-friendly error message
+  };
 
   // HTTP status code for validation errors
   const statusCode = 400;

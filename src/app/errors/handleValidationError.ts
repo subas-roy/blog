@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { TError, TGenericErrorResponse } from '../interface/error';
+import { TGenericErrorResponse } from '../interface/error';
 
 /**
  * Handles MongoDB validation errors and formats them into a standardized error response.
@@ -11,15 +11,8 @@ import { TError, TGenericErrorResponse } from '../interface/error';
 const handleValidationError = (
   err: mongoose.Error.ValidationError,
 ): TGenericErrorResponse => {
-  // Extract and transform the validation errors into a detailed error array
-  const error: TError = Object.values(err.errors).map(
-    (val: mongoose.Error.ValidatorError | mongoose.Error.CastError) => {
-      return {
-        path: val.path, // The path (field name) that caused the validation error
-        message: val.message, // The error message explaining what went wrong
-      };
-    },
-  );
+  // Extract the first validation error
+  const error = Object.values(err.errors)[0];
 
   // Set the HTTP status code for validation errors
   const statusCode = 400;
@@ -28,7 +21,9 @@ const handleValidationError = (
   return {
     statusCode,
     message: 'Validation error', // Generalized message for validation issues
-    error, // Array containing detailed error information
+    error: {
+      details: error ? `${error.message}` : 'Validation error occurred',
+    },
   };
 };
 

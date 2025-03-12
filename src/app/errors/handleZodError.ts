@@ -1,5 +1,5 @@
 import { ZodError, ZodIssue } from 'zod';
-import { TError } from '../interface/error';
+import { TGenericErrorResponse } from '../interface/error';
 
 /**
  * Handles Zod validation errors and formats them into a standardized error response.
@@ -8,14 +8,9 @@ import { TError } from '../interface/error';
  * @param err - The validation error object provided by Zod.
  * @returns A structured error response containing an HTTP status code, message, and detailed error information.
  */
-const handleZodError = (err: ZodError) => {
-  // Transform Zod issues into a detailed error array
-  const error: TError = err.issues.map((issue: ZodIssue) => {
-    return {
-      path: issue?.path[issue.path.length - 1], // Extract the last part of the path causing the error
-      message: issue.message, // The validation error message
-    };
-  });
+const handleZodError = (err: ZodError): TGenericErrorResponse => {
+  // Extract the first validation error
+  const error: ZodIssue | undefined = err.issues[0];
 
   // Set the HTTP status code for validation errors
   const statusCode = 400;
@@ -24,7 +19,9 @@ const handleZodError = (err: ZodError) => {
   return {
     statusCode,
     message: 'Validation error', // Generalized message for validation issues
-    error, // Array containing detailed error information
+    error: {
+      details: error ? `${error.message}` : 'Validation error occurred',
+    },
   };
 };
 

@@ -11,13 +11,9 @@ import { TError, TGenericErrorResponse } from '../interface/error';
 const handleCastError = (
   err: mongoose.Error.CastError,
 ): TGenericErrorResponse => {
-  // Construct an array of errors with details about the field and message
-  const error: TError = [
-    {
-      path: err.path, // The field where the casting failed
-      message: err.message, // The error message provided by Mongoose
-    },
-  ];
+  const error: TError = {
+    details: err.message, // The error message provided by Mongoose
+  };
 
   // HTTP status code for validation errors
   const statusCode = 400;
@@ -26,7 +22,7 @@ const handleCastError = (
   return {
     statusCode,
     message: 'Validation error', // Generalized message for validation issues
-    error, // Array containing detailed error information
+    error,
   };
 };
 
