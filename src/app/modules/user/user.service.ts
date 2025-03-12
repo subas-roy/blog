@@ -10,7 +10,16 @@ const createUserIntoDB = async (user: TUser) => {
   };
   const result = await User.create(sanitizedUser); // Save the user data into the database
 
-  return result; // Return the created user document
+  // Fetch the user without sensitive data
+  const filteredUser = await User.findById(result._id)
+    .select('-password')
+    .select('-role')
+    .select('-isBlocked')
+    .select('-createdAt')
+    .select('-updatedAt')
+    .select('-__v');
+
+  return filteredUser; // Return the filteredUser document
 };
 
 // Service function to block a user in the database
