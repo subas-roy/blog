@@ -46,6 +46,7 @@ const getAllBlogesFromDB = async (query: Record<string, unknown>) => {
 
   // Construct search query
   const searchQuery = Blog.find({
+    isPublished: true,
     $or: blogSearchableFields.map((field) => ({
       [field]: { $regex: search, $options: 'i' }, // Case-insensitive search
     })),
