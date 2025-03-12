@@ -9,7 +9,14 @@ import { Blog } from './blog.model'; // Blog model for database interaction
  */
 const createBlogIntoDB = async (payload: TBlog) => {
   const result = await Blog.create(payload); // Save the blog in the database
-  return result;
+
+  const filteredBlog = await Blog.findById(result._id)
+    .select('-isPublished')
+    .select('-createdAt')
+    .select('-updatedAt')
+    .select('-__v');
+
+  return filteredBlog;
 };
 
 /**
@@ -42,14 +49,24 @@ const getAllBlogesFromDB = async (query: Record<string, unknown>) => {
     $or: blogSearchableFields.map((field) => ({
       [field]: { $regex: search, $options: 'i' }, // Case-insensitive search
     })),
-  });
+  })
+    .select('-isPublished')
+    .select('-createdAt')
+    .select('-updatedAt')
+    .select('-__v');
 
   // Apply additional filters based on the query
   if (query.filter) {
     queryObj._id = query.filter; // Support filtering by specific ID
   }
 
-  const filterQuery = searchQuery.find(queryObj).populate('author'); // Populate author details
+  const filterQuery = searchQuery
+    .find(queryObj)
+    .populate({
+      path: 'author',
+      select: '_id name email role isBlocked createdAt',
+    })
+    .select('-password'); // Populate author details
 
   // Apply sorting
   let sort = '-createdAt'; // Default sort by creation date (descending)
@@ -92,7 +109,17 @@ const getAllBlogesFromDB = async (query: Record<string, unknown>) => {
  * @returns The blog document or null if not found.
  */
 const getSingleBlogFromDB = async (id: string) => {
-  const result = await Blog.findById(id).populate('author'); // Fetch the blog and populate author details
+  const result = await Blog.findById(id)
+    .select('-isPublished')
+    .select('-createdAt')
+    .select('-updatedAt')
+    .select('-__v')
+    .populate({
+      path: 'author',
+      select: '_id name email role isBlocked createdAt',
+    })
+    .select('-password'); // Fetch the blog and populate author details
+
   return result;
 };
 
@@ -105,7 +132,16 @@ const getSingleBlogFromDB = async (id: string) => {
 const updateBlogIntoDB = async (id: string, payload: Partial<TBlog>) => {
   const result = await Blog.findByIdAndUpdate({ _id: id }, payload, {
     new: true, // Return the updated document
-  });
+  })
+    .select('-isPublished')
+    .select('-createdAt')
+    .select('-updatedAt')
+    .select('-__v')
+    .populate({
+      path: 'author',
+      select: '_id name email role isBlocked createdAt',
+    });
+
   return result;
 };
 
@@ -115,12 +151,11 @@ const updateBlogIntoDB = async (id: string, payload: Partial<TBlog>) => {
  * @returns The updated blog document or null if not found.
  */
 const deleteBlogFromDB = async (id: string) => {
-  const result = await Blog.findByIdAndUpdate(
+  await Blog.findByIdAndUpdate(
     id,
     { isPublished: false }, // Mark the blog as unpublished
-    { new: true }, // Return the updated document
+    // { new: true }, // Return the updated document
   );
-  return result;
 };
 
 // Export all blog-related services for use in other parts of the application
