@@ -24,12 +24,11 @@ const createUserIntoDB = async (user: TUser) => {
 
 // Service function to block a user in the database
 const blockUserIntoDB = async (id: string) => {
-  const result = await User.findByIdAndUpdate(
+  await User.findByIdAndUpdate(
     id, // User ID to be blocked
     { isBlocked: true }, // Update the `isBlocked` field to true
-    { new: true }, // Return the updated document after the update
+    // { new: true }, // Return the updated document after the update
   );
-  return result; // Return the updated user document
 };
 
 // Exporting the user services as an object

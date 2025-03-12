@@ -122,12 +122,11 @@ const refreshToken = async (token: string) => {
  * @returns {Object} The updated blog document with `isPublished: false`.
  */
 const deleteBlogFromDB = async (id: string) => {
-  const result = await Blog.findByIdAndUpdate(
+  await Blog.findByIdAndUpdate(
     id,
     { isPublished: false }, // Mark the blog as not published (soft delete)
-    { new: true }, // Return the updated blog document
+    // { new: true }, // Return the updated blog document
   );
-  return result;
 };
 
 // Exporting the authentication services
