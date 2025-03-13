@@ -14,7 +14,12 @@ const createBlogIntoDB = async (payload: TBlog) => {
     .select('-isPublished')
     .select('-createdAt')
     .select('-updatedAt')
-    .select('-__v');
+    .select('-__v')
+    .populate({
+      path: 'author',
+      select: '_id name email role isBlocked createdAt',
+    })
+    .select('-password'); // Fetch the blog and populate author details
 
   return filteredBlog;
 };
